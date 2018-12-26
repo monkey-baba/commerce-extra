@@ -220,10 +220,10 @@ public abstract class UMLModelGenerator {
 
     public void generateFile(String content, UMLClassModel classModel) {
         try {
-            File directory = new File("");//需要填写工程名
-//            String path = this.getClass().getResource("").getPath();
+            String userDir = System.getProperty("user.dir");
+//            userDir = userDir + "/commerce-extra/model-generator";
 
-            String path = directory.getAbsolutePath() + UMLConfig.GENSRC_PATH + packageName2Path(classModel.getPackageName());
+            String path = userDir + UMLConfig.GENSRC_PATH + packageName2Path(classModel.getPackageName());
             File dirPath = new File(path);
             if (!dirPath.exists()) {
                 dirPath.mkdirs();

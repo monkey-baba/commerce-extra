@@ -12,7 +12,7 @@ import java.util.Date;
 public class UMLConfig {
 
     private String baseModel;
-    public static String GENSRC_PATH = "/src/main/gensrc";
+    public static String GENSRC_PATH = "/commerce-extra/model-generator/src/main/gensrc";
     public static String UML_DEFINITION_FILE = "modelgen/udf.mdj";
     public static String ID_SUFFIX = "_id";
     public static String ID_TYPE = "Long";

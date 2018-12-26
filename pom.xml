@@ -15,6 +15,7 @@
 
   <modules>
     <module>service-generator</module>
+    <module>model-generator</module>
   </modules>
 
 
