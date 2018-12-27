@@ -4,6 +4,7 @@ import com.hubspot.jinjava.Jinjava;
 import com.hubspot.jinjava.JinjavaConfig;
 import com.mbb.commerce.extra.svcgen.file.DeleteDirectoryVisitor;
 import com.mbb.commerce.extra.svcgen.service.GeneratorService;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
@@ -33,24 +34,17 @@ public class GeneratorServiceImpl implements GeneratorService {
     private Jinjava jinjava = new Jinjava(
             JinjavaConfig.newBuilder().withLstripBlocks(true).withTrimBlocks(true).build());
 
-    public static void main(String[] args) {
-        Jinjava jinjava = new Jinjava();
-        System.out.println(jinjava.getGlobalConfig().isLstripBlocks());
-        System.out.println(jinjava.getGlobalConfig().isTrimBlocks());
-        jinjava.getJinjavaDoc().getFunctions().forEach((k, v) -> {
-            System.out.println(k);
-        });
-    }
 
     @Override
     public String moduleGenerate(HashMap<String, Object> context, String path) throws IOException {
 
         //扫描TEMPLATE路径
         try {
-            if (Files.notExists(Paths.get(path + TEMPLATE))) {
-                throw new RuntimeException("模板文件夹不存在，请检查:" + path + TEMPLATE);
+            String templatePath = path + File.separator + TEMPLATE;
+            if (Files.notExists(Paths.get(templatePath))) {
+                throw new RuntimeException("模板文件夹不存在，请检查:" + templatePath);
             }
-            Files.walkFileTree(Paths.get(path + TEMPLATE), new SimpleFileVisitor<Path>() {
+            Files.walkFileTree(Paths.get(templatePath), new SimpleFileVisitor<Path>() {
 
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
