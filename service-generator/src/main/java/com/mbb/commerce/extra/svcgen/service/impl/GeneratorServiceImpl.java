@@ -27,7 +27,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     private static final Pattern MYBATIS = Pattern.compile(".+/src/.+Mapper\\.(xml)$");
     private static final List<Pattern> PATTERNS =
             Arrays.asList(Pattern.compile(".+\\.md$"), Pattern.compile(".+pom.xml$"),
-                    Pattern.compile(".+/src/.+\\.(xml|java)$")
+                    Pattern.compile(".+/src/.+\\.(xml|java|yaml)$")
             );
     private static final String TEMPLATE = "demo-service";
 
@@ -59,14 +59,19 @@ public class GeneratorServiceImpl implements GeneratorService {
                             }
                         }
                         System.out.println("Origin:" + originPath);
+                        String name = context.get("name").toString();
                         if (filePath.contains("src")) {
                             //替换包名
                             filePath = filePath.replaceAll("com/mbb/demo",
-                                    context.get("group").toString().replaceAll("\\.", "/"));
+                                    (context.get("group").toString()+"."+name).replaceAll("\\.", "/"));
                         }
                         //替换name
                         filePath = filePath
-                                .replaceAll("demo", context.get("name").toString());
+                                .replaceAll("(demo)", name);
+
+                        name=name.substring(0,1).toUpperCase()+name.substring(1);
+                        filePath = filePath
+                                .replaceAll("(Demo)", name);
                         System.out.println("New:" + filePath);
 
                         //生成新的文件

@@ -26,9 +26,9 @@ import org.springframework.util.StringUtils;
 public class Generator {
 
     private static final Map<String, String> CONFIG = new HashMap<String, String>() {{
-        put("1", "config");
+        put("1", "nacos");
         put("2", "apollo");
-        put("3", "nacos");
+        put("3", "config");
     }};
     private static final Set<String> CONFIG_TYPE = CONFIG.keySet();
     private static final Map<String, String> DATABASE = new HashMap<String, String>() {{
@@ -55,9 +55,10 @@ public class Generator {
     }};
     private static final Set<String> PLATFORM_TYPE = PLATFORM.keySet();
     private static final Map<String, String> REGISTRY = new HashMap<String, String>() {{
-        put("1", "eureka");
+        put("1", "nacos");
         put("2", "consul");
-        put("3", "zookeeper");
+        put("3", "eureka");
+        put("4", "zookeeper");
     }};
     private static final Set<String> REGISTRY_TYPE = REGISTRY.keySet();
     private static final Map<String, Boolean> RIBBON = new HashMap<String, Boolean>() {{
@@ -97,7 +98,7 @@ public class Generator {
         }
         name = name.replaceAll("-service", "");
 
-        printMessage("请输入组织名(eg:com.mbb.test)");
+        printMessage("请输入组织名(eg:com.mbb)");
         // 组织名
         String group;
         while (StringUtils.isEmpty(group = reader.readLine())) {
@@ -135,11 +136,11 @@ public class Generator {
         String config = null;
         if ("1".equals(platform)) {
 
-            printMessage("请选择注册中心 (1.Eureka 2.Consul 3.Zookeeper)");
+            printMessage("请选择注册中心 (1.Nacos 2.Consul 3.Eureka 4.Zookeeper)");
             //注册中心选择
             while (StringUtils.isEmpty(registry = reader.readLine()) || !REGISTRY_TYPE
                     .contains(registry)) {
-                printMessage("请选择注册中心 (1.Eureka 2.Consul 3.Zookeeper)");
+                printMessage("请选择注册中心 (1.Nacos 2.Consul 3.Eureka 4.Zookeeper)");
             }
 
             printMessage("是否开启Ribbon (1.是 2.否 )");
@@ -156,10 +157,10 @@ public class Generator {
                 printMessage("是否开启Hystrix (1.是 2.否 )");
             }
 
-            printMessage("选择配置中心 (1.Cloud Config 2.Apollo 3.Nacos )");
+            printMessage("选择配置中心 (1.Nacos 2.Apollo 3.Cloud Config )");
             while (StringUtils.isEmpty(config = reader.readLine()) || !CONFIG_TYPE
                     .contains(config)) {
-                printMessage("选择配置中心 (1.Cloud Config 2.Apollo 3.Nacos )");
+                printMessage("选择配置中心 (1.Nacos 2.Apollo 3.Cloud Config )");
             }
 
         } else {
@@ -175,6 +176,7 @@ public class Generator {
         context.put("ribbon", RIBBON.get(ribbon));
         context.put("hystrix", HYSTRIX.get(hystrix));
         context.put("config", CONFIG.get(config));
+        context.put("registry", REGISTRY.get(registry));
         return generatorService.moduleGenerate(context, home.getDir().getAbsolutePath());
     }
 
