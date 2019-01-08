@@ -4,11 +4,13 @@ import com.google.common.collect.Maps;
 import com.mbb.commerce.extra.svcgen.service.GeneratorService;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -81,6 +83,7 @@ public class Generator {
 
     @ShellMethod("Generate Custom Service")
     public String svcGen() throws IOException {
+
         InputStream input = terminal.input();
         OutputStream output = terminal.output();
 
@@ -181,7 +184,15 @@ public class Generator {
     }
 
     private void printMessage(String content) throws IOException {
-        this.writer.write(content);
+        Boolean gbk = false;
+        if (!"/".equals(File.separator)) {
+            gbk = true;
+        }
+        if (gbk) {
+            this.writer.write(new String(content.getBytes(StandardCharsets.UTF_8), "GBK"));
+        } else {
+            this.writer.write(content);
+        }
         this.writer.write("\n");
         this.writer.flush();
     }

@@ -24,10 +24,10 @@ import org.springframework.stereotype.Service;
 public class GeneratorServiceImpl implements GeneratorService {
 
 
-    private static final Pattern MYBATIS = Pattern.compile(".+/src/.+Mapper\\.(xml)$");
+    private static final Pattern MYBATIS = Pattern.compile(".+"+File.separator+"src"+File.separator+".+Mapper\\.(xml)$");
     private static final List<Pattern> PATTERNS =
             Arrays.asList(Pattern.compile(".+\\.md$"), Pattern.compile(".+pom.xml$"),
-                    Pattern.compile(".+/src/.+\\.(xml|java|yaml)$")
+                    Pattern.compile(".+"+File.separator+"src"+File.separator+".+\\.(xml|java|yaml)$")
             );
     private static final String TEMPLATE = "demo-service";
 
@@ -38,7 +38,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     @Override
     public String moduleGenerate(HashMap<String, Object> context, String path) throws IOException {
 
-        //扫描TEMPLATE路径
+        // 扫描TEMPLATE路径
         try {
             String templatePath = path + File.separator + TEMPLATE;
             if (Files.notExists(Paths.get(templatePath))) {
@@ -53,7 +53,7 @@ public class GeneratorServiceImpl implements GeneratorService {
                     final String originPath = filePath;
                     if (PATTERNS.stream().anyMatch(p -> p.matcher(originPath).matches())) {
                         if ("jpa".equals(context.get("orm"))) {
-                            //JPA忽略mapper文件
+                            // JPA忽略mapper文件
                             if (MYBATIS.matcher(originPath).matches()) {
                                 return FileVisitResult.CONTINUE;
                             }
@@ -61,11 +61,11 @@ public class GeneratorServiceImpl implements GeneratorService {
                         System.out.println("Origin:" + originPath);
                         String name = context.get("name").toString();
                         if (filePath.contains("src")) {
-                            //替换包名
-                            filePath = filePath.replaceAll("com/mbb/demo",
-                                    (context.get("group").toString()+"."+name).replaceAll("\\.", "/"));
+                            // 替换包名
+                            filePath = filePath.replaceAll("com"+File.separator+"mbb"+File.separator+"demo",
+                                    (context.get("group").toString()+"."+name).replaceAll("\\.", ""+File.separator+""));
                         }
-                        //替换name
+                        // 替换name
                         filePath = filePath
                                 .replaceAll("(demo)", name);
 
@@ -74,7 +74,7 @@ public class GeneratorServiceImpl implements GeneratorService {
                                 .replaceAll("(Demo)", name);
                         System.out.println("New:" + filePath);
 
-                        //生成新的文件
+                        // 生成新的文件
                         String render = jinjava
                                 .render(new String(Files.readAllBytes(file),
                                         StandardCharsets.UTF_8), context);
@@ -102,7 +102,7 @@ public class GeneratorServiceImpl implements GeneratorService {
             e.printStackTrace();
             return "生成模板失败，错误:" + e.getMessage();
         }
-        return "完成，请添加 <module>"+context.get("name")+"-service</module> 到commerce-service/pom.xml";
+        return "完成，请添加 <module>"+context.get("name")+"-service</module> 到commerce-service"+File.separator+"pom.xml";
     }
 
 
