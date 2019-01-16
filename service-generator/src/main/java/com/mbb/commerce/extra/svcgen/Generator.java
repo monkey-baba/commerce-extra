@@ -68,6 +68,12 @@ public class Generator {
         put("2", false);
     }};
     private static final Set<String> RIBBON_TYPE = RIBBON.keySet();
+
+    private static final Map<String, Boolean> FEIGN = new HashMap<String, Boolean>() {{
+        put("1", true);
+        put("2", false);
+    }};
+    private static final Set<String> FEIGN_TYPE = RIBBON.keySet();
     @Autowired
     private GeneratorService generatorService;
     @Autowired
@@ -135,6 +141,7 @@ public class Generator {
         //Spring Cloud选项
         String registry = null;
         String ribbon = null;
+        String feign = null;
         String hystrix = null;
         String config = null;
         if ("1".equals(platform)) {
@@ -144,6 +151,13 @@ public class Generator {
             while (StringUtils.isEmpty(registry = reader.readLine()) || !REGISTRY_TYPE
                     .contains(registry)) {
                 printMessage("请选择注册中心 (1.Nacos 2.Consul 3.Eureka 4.Zookeeper)");
+            }
+
+            printMessage("是否开启Feign (1.是 2.否 )");
+            //Ribbon开启
+            while (StringUtils.isEmpty(feign = reader.readLine()) || !FEIGN_TYPE
+                    .contains(feign)) {
+                printMessage("是否开启Feign (1.是 2.否 )");
             }
 
             printMessage("是否开启Ribbon (1.是 2.否 )");
@@ -180,6 +194,7 @@ public class Generator {
         context.put("hystrix", HYSTRIX.get(hystrix));
         context.put("config", CONFIG.get(config));
         context.put("registry", REGISTRY.get(registry));
+        context.put("feign", FEIGN.get(feign));
         return generatorService.moduleGenerate(context, home.getDir().getAbsolutePath());
     }
 
