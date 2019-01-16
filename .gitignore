@@ -58,3 +58,4 @@ ehthumbs_vista.db
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
+model-generator/src/main/gensrc/
